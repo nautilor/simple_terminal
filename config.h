@@ -9,7 +9,7 @@
                                     .alpha = 0 }
 
 /* this is safe to mess with */
-#define TITLE "qterm"
+#define TITLE "simple_term"
 
 #define FONT        "Terminus"
 #define FONT_SCALE  0.75
