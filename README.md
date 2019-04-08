@@ -10,4 +10,5 @@ Compile with
 
 - ~~keyboard shortcut for copy/paste~~
 - ~~Keyboard shortcut for reset~~
+- Keyboard shortcut to increment/decrement/reset font scale
 - Ideas not found...
