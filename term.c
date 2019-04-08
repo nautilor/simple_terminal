@@ -61,6 +61,7 @@ int main(int argc, char *argv[]) {
         NULL, NULL);
 
     /* exit on close */
+    g_signal_connect(window, "delete-event", gtk_main_quit, NULL);
     g_signal_connect(terminal, "child-exited", gtk_main_quit, NULL);
 
     /* put it togheter */
