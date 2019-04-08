@@ -76,12 +76,14 @@ int main(int argc, char *argv[]) {
     gtk_main();
 }
 
+/* keyboard input */
 gboolean key_press(VteTerminal *terminal, GdkEventKey *event) {
     const guint modifiers = event->state & gtk_accelerator_get_default_mod_mask();
 
     switch (modifiers|gdk_keyval_to_lower(event->keyval)) {
-        case PASTE:     vte_terminal_paste_clipboard(terminal); return TRUE;
-        case COPY:      vte_terminal_copy_clipboard_format(terminal, VTE_FORMAT_TEXT); return TRUE;
+        case PASTE:     vte_terminal_paste_clipboard(VTE_TERMINAL(terminal)); return TRUE;
+        case COPY:      vte_terminal_copy_clipboard_format(VTE_TERMINAL(terminal), VTE_FORMAT_TEXT); return TRUE;
+        case RESET:     vte_terminal_reset(VTE_TERMINAL(terminal), TRUE, TRUE); return TRUE;
     }
     return FALSE;
 }

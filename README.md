@@ -9,4 +9,5 @@ Compile with
 ## TODO
 
 - ~~keyboard shortcut for copy/paste~~
+- ~~Keyboard shortcut for reset~~
 - Ideas not found...
