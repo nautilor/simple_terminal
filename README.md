@@ -2,4 +2,4 @@
 
 Compile with
 
-    g_signal_connect(window, "delete-event", gtk_main_quit, NULL);
+    $ gcc -O2 -Wall $(pkg-config --cflags vte-2.91) term.c -o term $(pkg-config --libs vte-2.91)
