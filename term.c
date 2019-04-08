@@ -1,7 +1,7 @@
 #include <vte/vte.h>
 #include "config.h"
 
-static gboolean key_press(VteTerminal *vte, GdkEventKey *event);
+static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);
 
 int main(int argc, char *argv[]) {
     GtkWidget *window, *terminal;
