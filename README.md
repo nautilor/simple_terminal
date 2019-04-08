@@ -8,5 +8,5 @@ Compile with
 
 ## TODO
 
-- Keyboard shortcut for copy/paste
+- ~~keyboard shortcut for copy/paste~~
 - Ideas not found...

@@ -9,14 +9,16 @@
                                     .alpha = 0 }
 
 /* this is safe to mess with */
-#define TITLE "simple_term"
 
-#define FONT        "Terminus"
+/* generic settings */
+#define TITLE "simple_term"
+#define FONT        "Monospace"
 #define FONT_SCALE  0.75
 #define CURSOR_AH   TRUE
 #define REWRAP      TRUE
 #define BELL        FALSE
 
+/* colors */
 #define BACKGROUND  0x111111
 #define CLR_0       0x1C1C1C
 #define CLR_1       0xD81860
@@ -34,3 +36,7 @@
 #define CLR_13      0xA78EDB
 #define CLR_14      0x43AFCE
 #define CLR_15      0xF3EBE2
+
+/* keyboard keybind */
+#define PASTE   GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_KEY_v
+#define COPY    GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_KEY_c

@@ -1,6 +1,8 @@
 #include <vte/vte.h>
 #include "config.h"
 
+static gboolean key_press(VteTerminal *vte, GdkEventKey *event);
+
 int main(int argc, char *argv[]) {
     GtkWidget *window, *terminal;
     PangoFontDescription *df;
@@ -65,8 +67,21 @@ int main(int argc, char *argv[]) {
     g_signal_connect(window, "delete-event", gtk_main_quit, NULL);
     g_signal_connect(terminal, "child-exited", gtk_main_quit, NULL);
 
+    /* keyboard shortcut support */
+    g_signal_connect(terminal, "key-press-event", G_CALLBACK(key_press), NULL);
+
     /* put it togheter */
     gtk_container_add(GTK_CONTAINER(window), terminal);
     gtk_widget_show_all(window);
     gtk_main();
+}
+
+gboolean key_press(VteTerminal *terminal, GdkEventKey *event) {
+    const guint modifiers = event->state & gtk_accelerator_get_default_mod_mask();
+
+    switch (modifiers|gdk_keyval_to_lower(event->keyval)) {
+        case PASTE:     vte_terminal_paste_clipboard(terminal); return TRUE;
+        case COPY:      vte_terminal_copy_clipboard_format(terminal, VTE_FORMAT_TEXT); return TRUE;
+    }
+    return FALSE;
 }
