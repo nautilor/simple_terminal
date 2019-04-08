@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     gchar **envp = g_get_environ();
     gchar **command = (gchar *[]){g_strdup(g_environ_getenv(envp, "SHELL")), NULL };
     g_strfreev(envp);
-    vte_terminal_spawn_sync(VTE_TERMINAL(terminal),
+    vte_terminal_spawn_async(VTE_TERMINAL(terminal),
         VTE_PTY_DEFAULT,
         NULL,
         command,
@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
         0,
         NULL, NULL,
         NULL,
+        250, NULL,
         NULL, NULL);
 
     /* exit on close */
