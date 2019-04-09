@@ -14,6 +14,7 @@
 #define TITLE "simple_term"
 #define FONT        "Monospace"
 #define FONT_SCALE  0.75
+#define SCALE_FACTOR 0.2
 #define CURSOR_AH   TRUE
 #define REWRAP      TRUE
 #define BELL        FALSE
@@ -37,7 +38,13 @@
 #define CLR_14      0x43AFCE
 #define CLR_15      0xF3EBE2
 
-/* keyboard keybind */
-#define PASTE   GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_KEY_v
-#define COPY    GDK_CONTROL_MASK|GDK_SHIFT_MASK|GDK_KEY_c
-#define RESET   GDK_CONTROL_MASK|GDK_KEY_r
+/* keyboard keybind 
+ *
+ * REMOVED FOR NOW CAUSE THEY DO WORK PROPERLY
+ * 
+ * For the moment you can use:
+ *      Ctrl+Alt+C/V    -> COPY/PASTE
+ *      Ctrl+P          -> INCREASE FONT
+ *      Ctrl+O          -> DECREASE FONT
+ *      Ctrl+I          -> RESET FONT
+ * */

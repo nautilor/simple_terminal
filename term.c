@@ -76,14 +76,40 @@ int main(int argc, char *argv[]) {
     gtk_main();
 }
 
+static void increase_font(VteTerminal *terminal) {
+    vte_terminal_set_font_scale(VTE_TERMINAL(terminal), vte_terminal_get_font_scale(VTE_TERMINAL(terminal))+SCALE_FACTOR);
+}
+
+static void decrease_font(VteTerminal *terminal) {
+    vte_terminal_set_font_scale(VTE_TERMINAL(terminal), vte_terminal_get_font_scale(VTE_TERMINAL(terminal))-SCALE_FACTOR);
+}
+
 /* keyboard input */
 gboolean key_press(VteTerminal *terminal, GdkEventKey *event) {
     const guint modifiers = event->state & gtk_accelerator_get_default_mod_mask();
 
-    switch (modifiers|gdk_keyval_to_lower(event->keyval)) {
-        case PASTE:     vte_terminal_paste_clipboard(VTE_TERMINAL(terminal)); return TRUE;
-        case COPY:      vte_terminal_copy_clipboard_format(VTE_TERMINAL(terminal), VTE_FORMAT_TEXT); return TRUE;
-        case RESET:     vte_terminal_reset(VTE_TERMINAL(terminal), TRUE, TRUE); return TRUE;
+    if (modifiers == GDK_CONTROL_MASK) {
+        switch(gdk_keyval_to_lower(event->keyval)) {
+            case GDK_KEY_p:
+                increase_font(VTE_TERMINAL(terminal));
+                return TRUE;
+            case GDK_KEY_o:
+                decrease_font(VTE_TERMINAL(terminal));
+                return TRUE;
+            case GDK_KEY_i:
+                vte_terminal_set_font_scale(VTE_TERMINAL(terminal), FONT_SCALE);
+                return TRUE;
+        }
+    }
+
+    if (modifiers == (GDK_CONTROL_MASK|GDK_MOD1_MASK)) {
+        switch (gdk_keyval_to_lower(event->keyval)) {
+            case GDK_KEY_c: /* copy to clipboard */
+                vte_terminal_copy_clipboard_format(VTE_TERMINAL(terminal), VTE_FORMAT_TEXT);
+                return TRUE;
+            case GDK_KEY_v: /* paste from clipboard */
+                vte_terminal_paste_clipboard(VTE_TERMINAL(terminal));
+        }
     }
     return FALSE;
 }
