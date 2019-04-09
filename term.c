@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
     vte_terminal_set_font_scale(VTE_TERMINAL(terminal), FONT_SCALE);
     vte_terminal_set_font(VTE_TERMINAL(terminal), df);
     vte_terminal_set_audible_bell(VTE_TERMINAL(terminal), BELL);
+    vte_terminal_set_size(VTE_TERMINAL(terminal), 100, 30);
 
     /* 16 color support */
     vte_terminal_set_colors(VTE_TERMINAL(terminal),
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]) {
         CLR_GDK(CLR_13),
         CLR_GDK(CLR_14),
         CLR_GDK(CLR_15)}, 16);
-   
+
     /* new shell */
     gchar **envp = g_get_environ();
     gchar **command = (gchar *[]){g_strdup(g_environ_getenv(envp, "SHELL")), NULL };
@@ -89,20 +90,6 @@ static void decrease_font(VteTerminal *terminal) {
 gboolean key_press(VteTerminal *terminal, GdkEventKey *event) {
     const guint modifiers = event->state & gtk_accelerator_get_default_mod_mask();
 
-    if (modifiers == GDK_CONTROL_MASK) {
-        switch(gdk_keyval_to_lower(event->keyval)) {
-            case GDK_KEY_p:
-                increase_font(VTE_TERMINAL(terminal));
-                return TRUE;
-            case GDK_KEY_o:
-                decrease_font(VTE_TERMINAL(terminal));
-                return TRUE;
-            case GDK_KEY_i:
-                vte_terminal_set_font_scale(VTE_TERMINAL(terminal), FONT_SCALE);
-                return TRUE;
-        }
-    }
-
     if (modifiers == (GDK_CONTROL_MASK|GDK_MOD1_MASK)) {
         switch (gdk_keyval_to_lower(event->keyval)) {
             case GDK_KEY_c: /* copy to clipboard */
@@ -110,6 +97,17 @@ gboolean key_press(VteTerminal *terminal, GdkEventKey *event) {
                 return TRUE;
             case GDK_KEY_v: /* paste from clipboard */
                 vte_terminal_paste_clipboard(VTE_TERMINAL(terminal));
+                return TRUE;
+            case GDK_KEY_p: /* increase font scale */
+                increase_font(VTE_TERMINAL(terminal));
+                return TRUE;
+            case GDK_KEY_o: /* decrease font scale */
+                decrease_font(VTE_TERMINAL(terminal));
+                return TRUE;
+            case GDK_KEY_i: /* reset font scale */
+                vte_terminal_set_font_scale(VTE_TERMINAL(terminal), FONT_SCALE);
+                return TRUE;
+
         }
     }
     return FALSE;
