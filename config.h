@@ -10,7 +10,7 @@
 /* this is safe to mess with */
 
 /* generic settings */
-#define TITLE "simple_term"
+#define TITLE       "simple_term"
 #define FONT        "Monospace"
 #define FONT_SCALE  0.75
 #define SCALE_FACTOR 0.2
@@ -42,7 +42,7 @@
  * 
  * For the moment you can use:
  *      Ctrl+Alt+C/V    -> COPY/PASTE
- *      Ctrl+P          -> INCREASE FONT
- *      Ctrl+O          -> DECREASE FONT
- *      Ctrl+I          -> RESET FONT
+ *      CtrlAlt+P       -> INCREASE FONT
+ *      Ctrl+Alt+O      -> DECREASE FONT
+ *      Ctrl+Alt+I      -> RESET FONT
  * */
