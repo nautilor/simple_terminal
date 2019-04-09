@@ -10,7 +10,14 @@ MAKE SURE TO TAKE A LOOK AT `config.h`
 
 ## Keybind
 
-     Ctrl+Alt+C/V    -> COPY/PASTE                                          CtrlAlt+P       -> INCREASE FONT                                        Ctrl+Alt+O      -> DECREASE FONT                                        Ctrl+Alt+I      -> RESET FONT                                          Ctrl+Alt+L      -> INCREASE WIDTH                                      Ctrl+Alt+J      -> INCREASE HEIGHT                                      Ctrl+Alt+H      -> DECREASE WIDTH [NOT WORKING]                        Ctrl+Alt+K      -> DECREASE HEIGHT [NOT WORKING]
+     Ctrl+Alt+C/V    -> COPY/PASTE
+     CtrlAlt+P       -> INCREASE FONT
+     Ctrl+Alt+O      -> DECREASE FONT
+     Ctrl+Alt+I      -> RESET FONT
+     Ctrl+Alt+L      -> INCREASE WIDTH
+     Ctrl+Alt+J      -> INCREASE HEIGHT
+     Ctrl+Alt+H      -> DECREASE WIDTH [NOT WORKING]
+     Ctrl+Alt+K      -> DECREASE HEIGHT [NOT WORKING]
         
 
 ## TODO
