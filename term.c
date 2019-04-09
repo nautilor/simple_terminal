@@ -2,6 +2,8 @@
 #include "config.h"
 
 static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);
+static void decrease_font(VteTerminal *terminal);
+static void increase_font(VteTerminal *terminal);
 
 int main(int argc, char *argv[]) {
     GtkWidget *window, *terminal;
