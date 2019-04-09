@@ -28,8 +28,7 @@ int main(int argc, char *argv[]) {
 
     /* 16 color support */
     vte_terminal_set_colors(VTE_TERMINAL(terminal),
-    &CLR_GDK(CLR_7),
-    &(GdkRGBA){ .alpha = 1 },
+    &CLR_GDK(CLR_7), NULL,
     (const GdkRGBA[]){
         CLR_GDK(CLR_0),
         CLR_GDK(CLR_1),
@@ -47,7 +46,7 @@ int main(int argc, char *argv[]) {
         CLR_GDK(CLR_13),
         CLR_GDK(CLR_14),
         CLR_GDK(CLR_15)}, 16);
-    
+   
     /* new shell */
     gchar **envp = g_get_environ();
     gchar **command = (gchar *[]){g_strdup(g_environ_getenv(envp, "SHELL")), NULL };

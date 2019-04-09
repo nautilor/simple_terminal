@@ -5,8 +5,7 @@
 #define CLR_16(x)  ((double)(x) / 0xff)
 #define CLR_GDK(x) (const GdkRGBA){ .red = CLR_16(CLR_R(x)), \
                                     .green = CLR_16(CLR_G(x)), \
-                                    .blue = CLR_16(CLR_B(x)), \
-                                    .alpha = 0 }
+                                    .blue = CLR_16(CLR_B(x)) }
 
 /* this is safe to mess with */
 
@@ -20,7 +19,6 @@
 #define BELL        FALSE
 
 /* colors */
-#define BACKGROUND  0x111111
 #define CLR_0       0x1C1C1C
 #define CLR_1       0xD81860
 #define CLR_2       0x60FF60
