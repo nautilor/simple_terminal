@@ -8,7 +8,7 @@ Compile with
 
 MAKE SURE TO TAKE A LOOK AT `config.h`
 
-## Keybind
+## KEYBIND
 
      Ctrl+Alt+C/V    -> COPY/PASTE
      CtrlAlt+P       -> INCREASE FONT
@@ -18,7 +18,7 @@ MAKE SURE TO TAKE A LOOK AT `config.h`
      Ctrl+Alt+J      -> INCREASE HEIGHT
      Ctrl+Alt+H      -> DECREASE WIDTH
      Ctrl+Alt+K      -> DECREASE HEIGHT
-        
+     
 
 ## TODO
 

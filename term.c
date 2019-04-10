@@ -6,8 +6,10 @@ static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);
 static void decrease_font(VteTerminal *terminal);
 static void increase_font(VteTerminal *terminal);
 static void resize(GtkWindow *window, int w, int h);
+static void arg_parse(GtkWindow *window, char *argv[], int argc);
 
 int main(int argc, char *argv[]) {
+    
     GtkWindow *window;
     GtkWidget *terminal;
     PangoFontDescription *df;
@@ -18,6 +20,8 @@ int main(int argc, char *argv[]) {
     window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), TITLE);
     df = pango_font_description_new();
+
+    arg_parse(window, argv, argc);
     
     // font settings 
     pango_font_description_set_size(df, 10 * PANGO_SCALE);
@@ -80,6 +84,13 @@ int main(int argc, char *argv[]) {
     gtk_container_add(GTK_CONTAINER(window), terminal);
     gtk_widget_show_all(GTK_WIDGET(window));
     gtk_main();
+}
+
+static void arg_parse(GtkWindow *window, char *argv[], int argc) {
+    for (int i = 0; i < argc; i++) {
+            if (strcmp(argv[i], "-center")) { gtk_window_set_title(window, ALT_TITLE); }
+
+    }
 }
 
 static void resize(GtkWindow *window, int w, int h) {
