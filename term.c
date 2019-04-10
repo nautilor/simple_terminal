@@ -1,20 +1,21 @@
 #include <vte/vte.h>
 #include "config.h"
 
-static gboolean window_press(GtkWidget *window, GdkEventKey *event);
+static gboolean window_press(GtkWindow *window, GdkEventKey *event);
 static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);
 static void decrease_font(VteTerminal *terminal);
 static void increase_font(VteTerminal *terminal);
-static void resize(GtkWidget *window, glong w, glong h);
+static void resize(GtkWindow *window, int w, int h);
 
 int main(int argc, char *argv[]) {
-    GtkWidget *window, *terminal;
+    GtkWindow *window;
+    GtkWidget *terminal;
     PangoFontDescription *df;
 
     // Initialise GTK, window, terminal and font
     gtk_init(&argc, &argv);
     terminal = vte_terminal_new();
-    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), TITLE);
     df = pango_font_description_new();
     
@@ -29,7 +30,7 @@ int main(int argc, char *argv[]) {
     vte_terminal_set_font_scale(VTE_TERMINAL(terminal), FONT_SCALE);
     vte_terminal_set_font(VTE_TERMINAL(terminal), df);
     vte_terminal_set_audible_bell(VTE_TERMINAL(terminal), BELL);
-    gtk_widget_set_size_request(window, WIDTH, HEIGHT);
+    gtk_window_set_default_size(GTK_WINDOW(window), WIDTH, HEIGHT);
     
     // 16 color support
     vte_terminal_set_colors(VTE_TERMINAL(terminal),
@@ -68,23 +69,23 @@ int main(int argc, char *argv[]) {
         NULL, NULL);
 
     // exit on close
-    g_signal_connect(window, "delete-event", gtk_main_quit, NULL);
-    g_signal_connect(terminal, "child-exited", gtk_main_quit, NULL);
+    g_signal_connect(GTK_WINDOW(window), "delete-event", gtk_main_quit, NULL);
+    g_signal_connect(VTE_TERMINAL(terminal), "child-exited", gtk_main_quit, NULL);
 
     // keyboard shortcut support
-    g_signal_connect(terminal, "key-press-event", G_CALLBACK(key_press), NULL);
-    g_signal_connect(window, "key-press-event", G_CALLBACK(window_press), NULL);
+    g_signal_connect(VTE_TERMINAL(terminal), "key-press-event", G_CALLBACK(key_press), NULL);
+    g_signal_connect(GTK_WINDOW(window), "key-press-event", G_CALLBACK(window_press), NULL);
 
     // put it togheter
     gtk_container_add(GTK_CONTAINER(window), terminal);
-    gtk_widget_show_all(window);
+    gtk_widget_show_all(GTK_WIDGET(window));
     gtk_main();
 }
 
-static void resize(GtkWidget *window, glong w, glong h) {
+static void resize(GtkWindow *window, int w, int h) {
     WIDTH += (WIDTH > 0) ? w : 0;
     HEIGHT += (HEIGHT > 0) ? h : 0;
-    gtk_widget_set_size_request(window, WIDTH, HEIGHT);
+    gtk_window_resize(GTK_WINDOW(window), WIDTH, HEIGHT);
 }
 
 static void increase_font(VteTerminal *terminal) {
@@ -120,7 +121,7 @@ gboolean key_press(VteTerminal *terminal, GdkEventKey *event) {
     }
     return FALSE;
 }
-static gboolean window_press(GtkWidget *window, GdkEventKey *event) {
+static gboolean window_press(GtkWindow *window, GdkEventKey *event) {
     const guint modifiers = event->state & gtk_accelerator_get_default_mod_mask();
      if (modifiers == (GDK_CONTROL_MASK|GDK_MOD1_MASK)) {
         switch (gdk_keyval_to_lower(event->keyval)) {

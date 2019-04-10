@@ -9,9 +9,9 @@
 
 // this is safe to mess with
 
-glong WIDTH    =  600;
-glong HEIGHT   =  400;
-glong R_FACTOR =    5;                   // window resize factor
+int WIDTH    =  600;
+int HEIGHT   =  400;
+int R_FACTOR =    5;                   // window resize factor
 
 #define TITLE        "Simple Terminal"
 #define FONT         "Monospace"

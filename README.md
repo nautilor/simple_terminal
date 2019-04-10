@@ -16,8 +16,8 @@ MAKE SURE TO TAKE A LOOK AT `config.h`
      Ctrl+Alt+I      -> RESET FONT
      Ctrl+Alt+L      -> INCREASE WIDTH
      Ctrl+Alt+J      -> INCREASE HEIGHT
-     Ctrl+Alt+H      -> DECREASE WIDTH [NOT WORKING]
-     Ctrl+Alt+K      -> DECREASE HEIGHT [NOT WORKING]
+     Ctrl+Alt+H      -> DECREASE WIDTH
+     Ctrl+Alt+K      -> DECREASE HEIGHT
         
 
 ## TODO
