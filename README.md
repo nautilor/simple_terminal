@@ -11,7 +11,7 @@ MAKE SURE TO TAKE A LOOK AT `config.h`
 ## KEYBIND
 
      Ctrl+Alt+C/V    -> COPY/PASTE
-     Ctrl+Alt+P       -> INCREASE FONT
+     Ctrl+Alt+P      -> INCREASE FONT
      Ctrl+Alt+O      -> DECREASE FONT
      Ctrl+Alt+I      -> RESET FONT
      Ctrl+Alt+L      -> INCREASE WIDTH
