@@ -88,10 +88,7 @@ int main(int argc, char *argv[]) {
 
 static void arg_parse(GtkWindow *window, char *argv[], int argc) {
     for (int i = 0; i < argc; i++) {
-            if (strcmp(argv[i], "-name") == 0) {
-                printf("%s", argv[i]);
-                gtk_window_set_title(window, ALT_TITLE);
-            }
+            if (strcmp(argv[i], "-name") == 0) { gtk_window_set_title(window, ALT_TITLE); }
     }
 }
 
