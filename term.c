@@ -8,8 +8,9 @@ static void increase_font(VteTerminal *terminal);
 static void resize(GtkWindow *window, int w, int h);
 static void arg_parse(GtkWindow *window, char *argv[], int argc);
 
+gboolean sticked = FALSE;
 int main(int argc, char *argv[]) {
-    
+
     GtkWindow *window;
     GtkWidget *terminal;
     PangoFontDescription *df;
@@ -80,7 +81,7 @@ int main(int argc, char *argv[]) {
     g_signal_connect(VTE_TERMINAL(terminal), "key-press-event", G_CALLBACK(key_press), NULL);
     g_signal_connect(GTK_WINDOW(window), "key-press-event", G_CALLBACK(window_press), NULL);
 
-    // put it togheter
+    // put it together
     gtk_container_add(GTK_CONTAINER(window), terminal);
     gtk_widget_show_all(GTK_WIDGET(window));
     gtk_main();
@@ -147,6 +148,10 @@ static gboolean window_press(GtkWindow *window, GdkEventKey *event) {
             case GDK_KEY_l:
                 resize(window, +R_FACTOR, 0);
                 return TRUE;
+            case GDK_KEY_s:
+                (sticked) ? gtk_window_unstick(window) : gtk_window_stick(window);
+                sticked = !sticked;
+                return  TRUE;
         }
      }
  return FALSE;

@@ -18,6 +18,7 @@ MAKE SURE TO TAKE A LOOK AT `config.h`
      Ctrl+Alt+J      -> INCREASE HEIGHT
      Ctrl+Alt+H      -> DECREASE WIDTH
      Ctrl+Alt+K      -> DECREASE HEIGHT
+     Ctrl+Alt+S      -> STICK/UNSTICK WINDOW
      
 
 ## TODO
