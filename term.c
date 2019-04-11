@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
 static void resize(GtkWindow *window, int w, int h) {
     W += (W > 0) ? w : 0;
     H += (H > 0) ? h : 0;
-    gtk_window_resize(GTK_WINDOW(window), WIDTH, HEIGHT);
+    gtk_window_resize(GTK_WINDOW(window), W, H);
 }
 
 static void increase_font(VteTerminal *terminal) {
