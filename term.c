@@ -8,6 +8,22 @@ static void increase_font(VteTerminal *terminal);
 static void resize(GtkWindow *window, int w, int h);
     
 gboolean sticked = FALSE;
+#define CLR_R(x)   (((x) & 0xff0000) >> 16)
+#define CLR_G(x)   (((x) & 0x00ff00) >>  8)
+#define CLR_B(x)   (((x) & 0x0000ff) >>  0)
+#define CLR_16(x)  ((double)(x) / 0xff)
+#define CLR_GDK(x) (const GdkRGBA){ .red = CLR_16(CLR_R(x)), \
+                                    .green = CLR_16(CLR_G(x)), \
+                                    .blue = CLR_16(CLR_B(x)) }
+
+const GdkRGBA PALETTE[] = {
+    CLR_GDK(CLR_0), CLR_GDK(CLR_1), CLR_GDK(CLR_2), CLR_GDK(CLR_3), CLR_GDK(CLR_4), CLR_GDK(CLR_5),
+    CLR_GDK(CLR_6), CLR_GDK(CLR_7), CLR_GDK(CLR_8), CLR_GDK(CLR_9), CLR_GDK(CLR_10), CLR_GDK(CLR_11),
+    CLR_GDK(CLR_12), CLR_GDK(CLR_13), CLR_GDK(CLR_14), CLR_GDK(CLR_15) };
+
+int W = WIDTH;
+int H = HEIGHT;
+int R = R_FACTOR;
 int main(int argc, char *argv[]) {
 
     GtkWindow *window;
@@ -32,7 +48,7 @@ int main(int argc, char *argv[]) {
     vte_terminal_set_font_scale(VTE_TERMINAL(terminal), FONT_SCALE);
     vte_terminal_set_font(VTE_TERMINAL(terminal), df);
     vte_terminal_set_audible_bell(VTE_TERMINAL(terminal), BELL);
-    gtk_window_set_default_size(GTK_WINDOW(window), WIDTH, HEIGHT);
+    gtk_window_set_default_size(GTK_WINDOW(window), W, H);
     
     // 16 color support
     vte_terminal_set_colors(VTE_TERMINAL(terminal), &CLR_GDK(CLR_7), NULL, PALETTE, PALETTE_SIZE);
@@ -61,8 +77,8 @@ int main(int argc, char *argv[]) {
 }
 
 static void resize(GtkWindow *window, int w, int h) {
-    WIDTH += (WIDTH > 0) ? w : 0;
-    HEIGHT += (HEIGHT > 0) ? h : 0;
+    W += (W > 0) ? w : 0;
+    H += (H > 0) ? h : 0;
     gtk_window_resize(GTK_WINDOW(window), WIDTH, HEIGHT);
 }
 
