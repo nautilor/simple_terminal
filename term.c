@@ -6,8 +6,7 @@ static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);
 static void decrease_font(VteTerminal *terminal);
 static void increase_font(VteTerminal *terminal);
 static void resize(GtkWindow *window, int w, int h);
-static void arg_parse(GtkWindow *window, char *argv[], int argc);
-
+    
 gboolean sticked = FALSE;
 int main(int argc, char *argv[]) {
 
@@ -21,8 +20,6 @@ int main(int argc, char *argv[]) {
     window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), TITLE);
     df = pango_font_description_new();
-
-    arg_parse(window, argv, argc);
     
     // font settings 
     pango_font_description_set_size(df, 10 * PANGO_SCALE);
@@ -38,40 +35,16 @@ int main(int argc, char *argv[]) {
     gtk_window_set_default_size(GTK_WINDOW(window), WIDTH, HEIGHT);
     
     // 16 color support
-    vte_terminal_set_colors(VTE_TERMINAL(terminal),
-    &CLR_GDK(CLR_7), NULL,
-    (const GdkRGBA[]){
-        CLR_GDK(CLR_0),
-        CLR_GDK(CLR_1),
-        CLR_GDK(CLR_2),
-        CLR_GDK(CLR_3),
-        CLR_GDK(CLR_4),
-        CLR_GDK(CLR_5),
-        CLR_GDK(CLR_6),
-        CLR_GDK(CLR_7),
-        CLR_GDK(CLR_8),
-        CLR_GDK(CLR_9),
-        CLR_GDK(CLR_10),
-        CLR_GDK(CLR_11),
-        CLR_GDK(CLR_12),
-        CLR_GDK(CLR_13),
-        CLR_GDK(CLR_14),
-        CLR_GDK(CLR_15)}, 16);
+    vte_terminal_set_colors(VTE_TERMINAL(terminal), &CLR_GDK(CLR_7), NULL, PALETTE, PALETTE_SIZE);
 
     // new shell
     gchar **envp = g_get_environ();
     gchar **command = (gchar *[]){g_strdup(g_environ_getenv(envp, "SHELL")), NULL };
     g_strfreev(envp);
     vte_terminal_spawn_async(VTE_TERMINAL(terminal),
-        VTE_PTY_DEFAULT,
-        NULL,
-        command,
-        NULL,
-        0,
-        NULL, NULL,
-        NULL,
-        250, NULL,
-        NULL, NULL);
+        VTE_PTY_DEFAULT, NULL, command, NULL,
+        0, NULL, NULL, NULL,
+        250, NULL, NULL, NULL);
 
     // exit on close
     g_signal_connect(GTK_WINDOW(window), "delete-event", gtk_main_quit, NULL);
@@ -85,12 +58,6 @@ int main(int argc, char *argv[]) {
     gtk_container_add(GTK_CONTAINER(window), terminal);
     gtk_widget_show_all(GTK_WIDGET(window));
     gtk_main();
-}
-
-static void arg_parse(GtkWindow *window, char *argv[], int argc) {
-    for (int i = 0; i < argc; i++) {
-            if (strcmp(argv[i], "-name") == 0) { gtk_window_set_title(window, ALT_TITLE); }
-    }
 }
 
 static void resize(GtkWindow *window, int w, int h) {

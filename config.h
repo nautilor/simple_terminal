@@ -23,22 +23,30 @@ int R_FACTOR =    5;                   // window resize factor
 #define BELL         FALSE              // no bell sound
 
 // colors
-#define CLR_0       0x1C1C1C
-#define CLR_1       0xD81860
-#define CLR_2       0x60FF60
-#define CLR_3       0xF9FD75
-#define CLR_4       0x4695C8
-#define CLR_5       0xA78EDB
-#define CLR_6       0x43AFCE
-#define CLR_7       0xF3EBE2
-#define CLR_8       0x1C1C1C
-#define CLR_9       0xD81860
-#define CLR_10      0x60FF60
-#define CLR_11      0xF9FD75
-#define CLR_12      0x4695C8
-#define CLR_13      0xA78EDB
-#define CLR_14      0x43AFCE
-#define CLR_15      0xF3EBE2
+#define BACKGROUND    0xC1C1C1
+#define CLR_0         0x1C1C1C
+#define CLR_1         0xD81860
+#define CLR_2         0x60FF60
+#define CLR_3         0xF9FD75
+#define CLR_4         0x4695C8
+#define CLR_5         0xA78EDB
+#define CLR_6         0x43AFCE
+#define CLR_7         0xF3EBE2
+#define CLR_8         0x1C1C1C
+#define CLR_9         0xD81860
+#define CLR_10        0x60FF60
+#define CLR_11        0xF9FD75
+#define CLR_12        0x4695C8
+#define CLR_13        0xA78EDB
+#define CLR_14        0x43AFCE
+#define CLR_15        0xF3EBE2
+#define PALETTE_SIZE  16
+
+
+const GdkRGBA PALETTE[] = {
+    CLR_GDK(CLR_0), CLR_GDK(CLR_1), CLR_GDK(CLR_2), CLR_GDK(CLR_3), CLR_GDK(CLR_4), CLR_GDK(CLR_5),
+    CLR_GDK(CLR_6), CLR_GDK(CLR_7), CLR_GDK(CLR_8), CLR_GDK(CLR_9), CLR_GDK(CLR_10), CLR_GDK(CLR_11),
+    CLR_GDK(CLR_12), CLR_GDK(CLR_13), CLR_GDK(CLR_14), CLR_GDK(CLR_15) };
 
 /* keyboard keybind 
  *
