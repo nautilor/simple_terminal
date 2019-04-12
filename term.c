@@ -6,7 +6,8 @@ static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);
 static void decrease_font(VteTerminal *terminal);
 static void increase_font(VteTerminal *terminal);
 static void resize(GtkWindow *window, int w, int h);
-    
+static void create_terminal();
+static void show_terminal(GtkWindow *window, int terminal);
 gboolean sticked = FALSE;
 #define CLR_R(x)   (((x) & 0xff0000) >> 16)
 #define CLR_G(x)   (((x) & 0x00ff00) >>  8)
@@ -21,35 +22,53 @@ const GdkRGBA PALETTE[] = {
     CLR_GDK(CLR_6), CLR_GDK(CLR_7), CLR_GDK(CLR_8), CLR_GDK(CLR_9), CLR_GDK(CLR_10), CLR_GDK(CLR_11),
     CLR_GDK(CLR_12), CLR_GDK(CLR_13), CLR_GDK(CLR_14), CLR_GDK(CLR_15) };
 
+GtkWidget * term[10];
+
+int current = 0;
+int used = 0;
 int W = WIDTH;
 int H = HEIGHT;
 int R = R_FACTOR;
 int main(int argc, char *argv[]) {
 
     GtkWindow *window;
-    GtkWidget *terminal;
-    PangoFontDescription *df;
-
+    
     // Initialise GTK, window, terminal and font
     gtk_init(&argc, &argv);
-    terminal = vte_terminal_new();
     window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), TITLE);
+        gtk_window_set_default_size(GTK_WINDOW(window), W, H);
+
+    create_terminal();
+    show_terminal(window, 0);
+    // exit on close
+    g_signal_connect(GTK_WINDOW(window), "delete-event", gtk_main_quit, NULL);
+   
+    // keyboard shortcut support
+    g_signal_connect(GTK_WINDOW(window), "key-press-event", G_CALLBACK(window_press), NULL);
+
+    // put it together
+    gtk_widget_show_all(GTK_WIDGET(window));
+    gtk_main();
+}
+
+static void create_terminal() {
+    GtkWidget *terminal;
+    PangoFontDescription *df;
+    terminal = vte_terminal_new();
     df = pango_font_description_new();
-    
     // font settings 
     pango_font_description_set_size(df, 10 * PANGO_SCALE);
     pango_font_description_set_weight(df, PANGO_WEIGHT_BOLD);
     pango_font_description_set_family(df, FONT);
-
+    
     // terminal settings
     vte_terminal_set_rewrap_on_resize(VTE_TERMINAL(terminal), REWRAP);
     vte_terminal_set_mouse_autohide(VTE_TERMINAL(terminal), CURSOR_AH);
     vte_terminal_set_font_scale(VTE_TERMINAL(terminal), FONT_SCALE);
     vte_terminal_set_font(VTE_TERMINAL(terminal), df);
     vte_terminal_set_audible_bell(VTE_TERMINAL(terminal), BELL);
-    gtk_window_set_default_size(GTK_WINDOW(window), W, H);
-    
+
     // 16 color support
     vte_terminal_set_colors(VTE_TERMINAL(terminal), &CLR_GDK(CLR_7), NULL, PALETTE, PALETTE_SIZE);
 
@@ -62,18 +81,16 @@ int main(int argc, char *argv[]) {
         0, NULL, NULL, NULL,
         250, NULL, NULL, NULL);
 
-    // exit on close
-    g_signal_connect(GTK_WINDOW(window), "delete-event", gtk_main_quit, NULL);
     g_signal_connect(VTE_TERMINAL(terminal), "child-exited", gtk_main_quit, NULL);
-
-    // keyboard shortcut support
     g_signal_connect(VTE_TERMINAL(terminal), "key-press-event", G_CALLBACK(key_press), NULL);
-    g_signal_connect(GTK_WINDOW(window), "key-press-event", G_CALLBACK(window_press), NULL);
+    term[used] = terminal;
+    used++;
+}
 
-    // put it together
-    gtk_container_add(GTK_CONTAINER(window), terminal);
-    gtk_widget_show_all(GTK_WIDGET(window));
-    gtk_main();
+static void show_terminal(GtkWindow *window, int terminal) {
+    gtk_container_remove(GTK_CONTAINER(window), term[current]);
+    gtk_container_add(GTK_CONTAINER(window), term[terminal]);
+    current = terminal;
 }
 
 static void resize(GtkWindow *window, int w, int h) {
@@ -135,6 +152,15 @@ static gboolean window_press(GtkWindow *window, GdkEventKey *event) {
                 (sticked) ? gtk_window_unstick(window) : gtk_window_stick(window);
                 sticked = !sticked;
                 return  TRUE;
+            case GDK_KEY_a:
+                create_terminal();
+                return TRUE;
+            case GDK_KEY_m:
+                show_terminal(window, current++);
+                return TRUE;
+            case GDK_KEY_n:
+                show_terminal(window, current--);
+
         }
      }
  return FALSE;
