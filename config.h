@@ -12,7 +12,6 @@
 #define BELL         FALSE              // no bell sound
 
 // colors
-#define BACKGROUND    0xC1C1C1
 #define CLR_0         0x1C1C1C
 #define CLR_1         0xD81860
 #define CLR_2         0x60FF60
