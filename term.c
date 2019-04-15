@@ -1,46 +1,52 @@
 #include <vte/vte.h>
 #include "config.h"
 
-static gboolean window_press(GtkWindow *window, GdkEventKey *event);
-static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);
-static void decrease_font(VteTerminal *terminal);
-static void increase_font(VteTerminal *terminal);
-static void resize(GtkWindow *window, int w, int h);
-static void create_terminal();
-static void switch_terminal(GtkWindow *window, int terminal);
-static void quit();
+static gboolean window_press(GtkWindow *window, GdkEventKey *event);   // keyboard events for the main window
+static gboolean key_press(VteTerminal *terminal, GdkEventKey *event);  // keyboard events for the single terminal
+static void decrease_font(VteTerminal *terminal);                      // decrease font for the single terminal
+static void increase_font(VteTerminal *terminal);                      // decrease font for the single terminal
+static void resize(GtkWindow *window, int w, int h);                   // resize the window via keyboard shortcut
+static void create_terminal();                                         // create a new terminal widget
+static void switch_terminal(GtkWindow *window, int terminal);          // switch to previous/next terminal widget
+static void quit();                                                    // close the application
 
-gboolean sticked = FALSE;
-#define CLR_R(x)   (((x) & 0xff0000) >> 16)
+gboolean sticked = FALSE;                                              // used to indicate if window should persist on all workspace
+
+
+#define CLR_R(x)   (((x) & 0xff0000) >> 16)                            // used to parse color from config file
 #define CLR_G(x)   (((x) & 0x00ff00) >>  8)
 #define CLR_B(x)   (((x) & 0x0000ff) >>  0)
 #define CLR_16(x)  ((double)(x) / 0xff)
 #define CLR_GDK(x) (const GdkRGBA){ .red = CLR_16(CLR_R(x)), \
                                     .green = CLR_16(CLR_G(x)), \
-                                    .blue = CLR_16(CLR_B(x)) }
+                                    .blue = CLR_16(CLR_B(x)) }         // used to parse color from config file
 
-const GdkRGBA PALETTE[] = {
-    CLR_GDK(CLR_0), CLR_GDK(CLR_1), CLR_GDK(CLR_2), CLR_GDK(CLR_3), CLR_GDK(CLR_4), CLR_GDK(CLR_5),
-    CLR_GDK(CLR_6), CLR_GDK(CLR_7), CLR_GDK(CLR_8), CLR_GDK(CLR_9), CLR_GDK(CLR_10), CLR_GDK(CLR_11),
+const GdkRGBA PALETTE[] = {                                            // palette color converted from config file
+    CLR_GDK(CLR_0), CLR_GDK(CLR_1), CLR_GDK(CLR_2),
+    CLR_GDK(CLR_3), CLR_GDK(CLR_4), CLR_GDK(CLR_5),
+    CLR_GDK(CLR_6), CLR_GDK(CLR_7), CLR_GDK(CLR_8),
+    CLR_GDK(CLR_9), CLR_GDK(CLR_10), CLR_GDK(CLR_11),
     CLR_GDK(CLR_12), CLR_GDK(CLR_13), CLR_GDK(CLR_14), CLR_GDK(CLR_15) };
 
 GtkWidget * term[MAX_TERM];
 
-int current = 0;
-int used = 0;
-int W = WIDTH;
-int H = HEIGHT;
-int R = R_FACTOR;
+int current = 0;                                                       // indicates the current terminal
+int used = 0;                                                          // indicates how many terminals are open
+int W = WIDTH;                                                         // WIDTH for the window
+int H = HEIGHT;                                                        // HEIGHT for the window
+int R = R_FACTOR;                                                      // resize factor for the window
+
 int main(int argc, char *argv[]) {
 
     GtkWindow *window;
     
-    // Initialise GTK, window, terminal and font
+    // initialise GTK, window
     gtk_init(&argc, &argv);
     window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), TITLE);
     gtk_window_set_default_size(GTK_WINDOW(window), W, H);
 
+    // initialize terminal
     create_terminal();
     gtk_container_add(GTK_CONTAINER(window), term[0]);
     
@@ -61,16 +67,20 @@ static void quit() {
 }
 
 static void create_terminal() {
-    if (used == MAX_TERM) { return; }
+    if (used == MAX_TERM) { return; }                                  // if MAX_TERM it's reached exit the function
+    // initialise the terminal
     GtkWidget *terminal;
-    PangoFontDescription *df;
     terminal = vte_terminal_new();
+
+    // initialise the font
+    PangoFontDescription *df;
     df = pango_font_description_new();
+
     // font settings 
     pango_font_description_set_size(df, 10 * PANGO_SCALE);
     pango_font_description_set_weight(df, PANGO_WEIGHT_BOLD);
     pango_font_description_set_family(df, FONT);
-    
+
     // terminal settings
     vte_terminal_set_rewrap_on_resize(VTE_TERMINAL(terminal), REWRAP);
     vte_terminal_set_mouse_autohide(VTE_TERMINAL(terminal), CURSOR_AH);
@@ -89,9 +99,12 @@ static void create_terminal() {
         VTE_PTY_DEFAULT, NULL, command, NULL,
         0, NULL, NULL, NULL,
         250, NULL, NULL, NULL);
-
+    
+    // events
     g_signal_connect(VTE_TERMINAL(terminal), "child-exited", G_CALLBACK(quit), NULL);
     g_signal_connect(VTE_TERMINAL(terminal), "key-press-event", G_CALLBACK(key_press), NULL);
+    
+    // register the reference to the terminal
     term[used] = g_object_ref(terminal);
     used++;
 }
