@@ -1,6 +1,6 @@
 # simple_terminal
 
-This is a simple terminal build around vte using c
+This branch contain an unstable version, don't use it as a daily terminal
 
 Compile with
 
@@ -19,13 +19,9 @@ MAKE SURE TO TAKE A LOOK AT `config.h`
      Ctrl+Alt+H      -> DECREASE WIDTH
      Ctrl+Alt+K      -> DECREASE HEIGHT
      Ctrl+Alt+S      -> STICK/UNSTICK WINDOW
-     
+     Ctrl+Alt+A      -> CREATE A NEW TERMINAL
+     Ctrl+Alt+N      -> GO TO THE NEXT TERMINAL
+     Ctrl+Alt+B      -> GO TO THE PREVIOUS TERMINAL
 
-## TODO
-
-- ~~keyboard shortcut for copy/paste~~
-- ~~Keyboard shortcut for reset~~
-- ~~Keyboard shortcut to increment/decrement/reset font scale~~
-- ~~Ctrl+C to send a SIGINT~~
-- ~~Ctrl+Z to send a SIGSTP~~
-- Ideas not found...
+## TO FIX
+With the implementation of terminal switching you can't close the window with `exit` or by simply closing it (it hangs)

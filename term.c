@@ -7,7 +7,7 @@ static void decrease_font(VteTerminal *terminal);
 static void increase_font(VteTerminal *terminal);
 static void resize(GtkWindow *window, int w, int h);
 static void create_terminal();
-static void show_terminal(GtkWindow *window, int terminal);
+static void switch_terminal(GtkWindow *window, int terminal);
 gboolean sticked = FALSE;
 #define CLR_R(x)   (((x) & 0xff0000) >> 16)
 #define CLR_G(x)   (((x) & 0x00ff00) >>  8)
@@ -37,10 +37,11 @@ int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
     window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
     gtk_window_set_title(GTK_WINDOW(window), TITLE);
-        gtk_window_set_default_size(GTK_WINDOW(window), W, H);
+    gtk_window_set_default_size(GTK_WINDOW(window), W, H);
 
     create_terminal();
-    show_terminal(window, 0);
+    gtk_container_add(GTK_CONTAINER(window), term[0]);
+    
     // exit on close
     g_signal_connect(GTK_WINDOW(window), "delete-event", gtk_main_quit, NULL);
    
@@ -83,14 +84,18 @@ static void create_terminal() {
 
     g_signal_connect(VTE_TERMINAL(terminal), "child-exited", gtk_main_quit, NULL);
     g_signal_connect(VTE_TERMINAL(terminal), "key-press-event", G_CALLBACK(key_press), NULL);
-    term[used] = terminal;
+    term[used] = g_object_ref(terminal);
     used++;
 }
 
-static void show_terminal(GtkWindow *window, int terminal) {
+static void switch_terminal(GtkWindow *window, int terminal) {
+    if (terminal < 0 || terminal > 9 || term[terminal] == NULL) { terminal = (terminal < current) ? used - 1 : 0; }
     gtk_container_remove(GTK_CONTAINER(window), term[current]);
     gtk_container_add(GTK_CONTAINER(window), term[terminal]);
+    gtk_widget_show_all(GTK_WIDGET(window));
+    gtk_widget_grab_focus(term[terminal]);
     current = terminal;
+    gtk_main();
 }
 
 static void resize(GtkWindow *window, int w, int h) {
@@ -155,11 +160,11 @@ static gboolean window_press(GtkWindow *window, GdkEventKey *event) {
             case GDK_KEY_a:
                 create_terminal();
                 return TRUE;
-            case GDK_KEY_m:
-                show_terminal(window, current++);
-                return TRUE;
             case GDK_KEY_n:
-                show_terminal(window, current--);
+                switch_terminal(window, current+1);
+                return TRUE;
+            case GDK_KEY_b:
+                switch_terminal(window, current-1);
 
         }
      }
