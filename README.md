@@ -24,4 +24,7 @@ MAKE SURE TO TAKE A LOOK AT `config.h`
      Ctrl+Alt+B      -> GO TO THE PREVIOUS TERMINAL
 
 ## TO FIX
-With the implementation of terminal switching you can't close the window with `exit` or by simply closing it (it hangs)
+~~With the implementation of terminal switching you can't close the window with `exit` or by simply closing it (it hangs)~~ [TO IMPROVE]
+
+## TODO
+Possibility to close a single terminal

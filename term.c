@@ -8,6 +8,8 @@ static void increase_font(VteTerminal *terminal);
 static void resize(GtkWindow *window, int w, int h);
 static void create_terminal();
 static void switch_terminal(GtkWindow *window, int terminal);
+static void quit();
+
 gboolean sticked = FALSE;
 #define CLR_R(x)   (((x) & 0xff0000) >> 16)
 #define CLR_G(x)   (((x) & 0x00ff00) >>  8)
@@ -22,7 +24,7 @@ const GdkRGBA PALETTE[] = {
     CLR_GDK(CLR_6), CLR_GDK(CLR_7), CLR_GDK(CLR_8), CLR_GDK(CLR_9), CLR_GDK(CLR_10), CLR_GDK(CLR_11),
     CLR_GDK(CLR_12), CLR_GDK(CLR_13), CLR_GDK(CLR_14), CLR_GDK(CLR_15) };
 
-GtkWidget * term[10];
+GtkWidget * term[MAX_TERM];
 
 int current = 0;
 int used = 0;
@@ -43,7 +45,7 @@ int main(int argc, char *argv[]) {
     gtk_container_add(GTK_CONTAINER(window), term[0]);
     
     // exit on close
-    g_signal_connect(GTK_WINDOW(window), "delete-event", gtk_main_quit, NULL);
+    g_signal_connect(GTK_WINDOW(window), "destroy", G_CALLBACK(quit), NULL);
    
     // keyboard shortcut support
     g_signal_connect(GTK_WINDOW(window), "key-press-event", G_CALLBACK(window_press), NULL);
@@ -53,7 +55,13 @@ int main(int argc, char *argv[]) {
     gtk_main();
 }
 
+static void quit() {
+    // It's a brutal solution but it works
+    exit(0);
+}
+
 static void create_terminal() {
+    if (used == MAX_TERM) { return; }
     GtkWidget *terminal;
     PangoFontDescription *df;
     terminal = vte_terminal_new();
@@ -82,14 +90,14 @@ static void create_terminal() {
         0, NULL, NULL, NULL,
         250, NULL, NULL, NULL);
 
-    g_signal_connect(VTE_TERMINAL(terminal), "child-exited", gtk_main_quit, NULL);
+    g_signal_connect(VTE_TERMINAL(terminal), "child-exited", G_CALLBACK(quit), NULL);
     g_signal_connect(VTE_TERMINAL(terminal), "key-press-event", G_CALLBACK(key_press), NULL);
     term[used] = g_object_ref(terminal);
     used++;
 }
 
 static void switch_terminal(GtkWindow *window, int terminal) {
-    if (terminal < 0 || terminal > 9 || term[terminal] == NULL) { terminal = (terminal < current) ? used - 1 : 0; }
+    if (terminal < 0 || terminal > MAX_TERM - 1 || term[terminal] == NULL) { terminal = (terminal < current) ? used - 1 : 0; }
     gtk_container_remove(GTK_CONTAINER(window), term[current]);
     gtk_container_add(GTK_CONTAINER(window), term[terminal]);
     gtk_widget_show_all(GTK_WIDGET(window));

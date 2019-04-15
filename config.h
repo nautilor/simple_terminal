@@ -1,15 +1,16 @@
-#define WIDTH        600
-#define HEIGHT       400
-#define R_FACTOR       5                 // window resize factor
+#define WIDTH         600
+#define HEIGHT        400
+#define R_FACTOR        5                 // window resize factor
 
-#define TITLE        "Simple Terminal"
-#define ALT_TITLE    "center_terminal"
-#define FONT         "Monospace"
-#define FONT_SCALE   0.75
-#define SCALE_FACTOR 0.1
-#define CURSOR_AH    TRUE               // auto hide the cursor while typing
-#define REWRAP       TRUE               // rewrap terminal based on content size
-#define BELL         FALSE              // no bell sound
+#define TITLE         "Simple Terminal"
+#define ALT_TITLE     "center_terminal"
+#define FONT          "Monospace"
+#define FONT_SCALE    0.75
+#define SCALE_FACTOR  0.1
+#define CURSOR_AH     TRUE               // auto hide the cursor while typing
+#define REWRAP        TRUE               // rewrap terminal based on content size
+#define BELL          FALSE              // no bell sound
+#define MAX_TERM      10
 
 // colors
 #define CLR_0         0x1C1C1C
