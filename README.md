@@ -1,6 +1,6 @@
 # simple_terminal
 
-This branch contain an unstable version, don't use it as a daily terminal
+This is a simple terminal build around vte using c
 
 Compile with
 
