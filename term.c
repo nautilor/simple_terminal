@@ -95,6 +95,7 @@ static void cycle_terminal(GtkWindow *window, int terminal) {
 }
 
 static void resize(GtkWindow *window, int w, int h) {
+    gtk_window_get_size (window, &W, &H);
     W += (W > 0) ? w : 0;
     H += (H > 0) ? h : 0;
     gtk_window_resize(GTK_WINDOW(window), W, H);
