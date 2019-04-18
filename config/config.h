@@ -3,7 +3,6 @@
 #define R_FACTOR        5                 // window resize factor
 
 #define TITLE         "Simple Terminal"
-#define ALT_TITLE     "center_terminal"
 #define FONT          "Monospace"
 #define FONT_SCALE    0.75
 #define SCALE_FACTOR  0.1
