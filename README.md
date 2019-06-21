@@ -1,3 +1,5 @@
+# DUE TO MY POOR LACK OF EFFORT IN THE CLOSING FUNCTION THIS APPLICATION WILL NEVER EXIT CORRECTLY AND REMAINING IN MEMORY
+
 # simple_terminal
 
 This is a simple terminal build around vte using c
