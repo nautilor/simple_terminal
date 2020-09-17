@@ -3,9 +3,10 @@
 #define R_FACTOR        5                 // window resize factor
 
 #define TITLE         "Simple Terminal"
-#define FONT          "Monospace"
-#define FONT_SCALE    0.75
-#define SCALE_FACTOR  0.1
+#define FONT          "Fantasque Sans Mono"
+#define FONT_SIZE     10
+#define FONT_SCALE    1                  // Leave this like this
+#define SCALE_FACTOR  0.1                // Leave this like this
 #define CURSOR_AH     TRUE               // auto hide the cursor while typing
 #define REWRAP        TRUE               // rewrap terminal based on content size
 #define BELL          FALSE              // no bell sound
@@ -30,18 +31,13 @@
 #define CLR_15        0xF3EBE2
 #define PALETTE_SIZE  16
 
+#define MODIFIER GDK_CONTROL_MASK|GDK_MOD1_MASK 
 
-/* keyboard keybind 
- *
- * REMOVED FOR NOW CAUSE THEY DO NOT WORK PROPERLY
- * 
- * For the moment you can use:
- *      Ctrl+Alt+C/V    -> COPY/PASTE
- *      CtrlAlt+P       -> INCREASE FONT
- *      Ctrl+Alt+O      -> DECREASE FONT
- *      Ctrl+Alt+I      -> RESET FONT
- *      Ctrl+Alt+L      -> INCREASE WIDTH
- *      Ctrl+Alt+J      -> INCREASE HEIGHT
- *      Ctrl+Alt+H      -> DECREASE WIDTH [NOT WORKING]
- *      Ctrl+Alt+K      -> DECREASE HEIGHT [NOT WORKING]
- * */
+#define COPY                GDK_KEY_c
+#define PASTE               GDK_KEY_v
+#define INCREASE_FONT       GDK_KEY_p
+#define DECREASE_FONT       GDK_KEY_o
+#define RESET_FONT          GDK_KEY_i
+#define NEW_TERMINAL        GDK_KEY_k
+#define NEXT_TERMINAL       GDK_KEY_m
+#define PREVIOUS_TERMINAL   GDK_KEY_n

@@ -6,7 +6,6 @@ static gboolean window_key_event(GtkWindow *window, GdkEventKey *event);   // ke
 static gboolean term_key_event(VteTerminal *terminal, GdkEventKey *event); // keyboard events for the single terminal
 static void decrease_font(VteTerminal *terminal);                          // decrease font for the single terminal
 static void increase_font(VteTerminal *terminal);                          // decrease font for the single terminal
-static void resize(GtkWindow *window, int w, int h);                       // resize the window via keyboard shortcut
 static void create_terminal();                                             // create a new terminal widget
 static void cycle_terminal(GtkWindow *window, int terminal);               // cycle to previous/next terminal widget
 static void quit();                                                        // close the application
@@ -52,7 +51,7 @@ static void create_terminal() {
     df = pango_font_description_new();
 
     // font settings 
-    pango_font_description_set_size(df, 10 * PANGO_SCALE);
+    pango_font_description_set_size(df, FONT_SIZE * PANGO_SCALE);
     pango_font_description_set_weight(df, PANGO_WEIGHT_BOLD);
     pango_font_description_set_family(df, FONT);
 
@@ -94,17 +93,6 @@ static void cycle_terminal(GtkWindow *window, int terminal) {
     gtk_main();
 }
 
-static void resize(GtkWindow *window, int w, int h) {
-    gtk_window_get_size (window, &W, &H);
-    W += (W > 0) ? w : 0;
-    H += (H > 0) ? h : 0;
-    gtk_window_resize(GTK_WINDOW(window), W, H);
-}
-
-static void stick(GtkWindow *window) {
-    (sticked) ? gtk_window_unstick(window) : gtk_window_stick(window);
-    sticked = !sticked;
-}
 
 static void increase_font(VteTerminal *terminal) {
     vte_terminal_set_font_scale(VTE_TERMINAL(terminal), vte_terminal_get_font_scale(VTE_TERMINAL(terminal))+SCALE_FACTOR);
@@ -118,13 +106,13 @@ gboolean term_key_event(VteTerminal *terminal, GdkEventKey *event) {
 
     const guint modifiers = event->state & gtk_accelerator_get_default_mod_mask();
 
-    if (modifiers == (GDK_CONTROL_MASK|GDK_MOD1_MASK)) {
+    if (modifiers == (MODIFIER)) {
         switch (gdk_keyval_to_lower(event->keyval)) {
-            case GDK_KEY_c: vte_terminal_copy_clipboard_format(terminal, VTE_FORMAT_TEXT); return TRUE;
-            case GDK_KEY_v: vte_terminal_paste_clipboard(terminal); return TRUE;
-            case GDK_KEY_p: increase_font(terminal); return TRUE;
-            case GDK_KEY_o: decrease_font(terminal); return TRUE;
-            case GDK_KEY_i: vte_terminal_set_font_scale(terminal, FONT_SCALE); return TRUE;
+            case COPY:          vte_terminal_copy_clipboard_format(terminal, VTE_FORMAT_TEXT); return TRUE;
+            case PASTE:         vte_terminal_paste_clipboard(terminal); return TRUE;
+            case INCREASE_FONT: increase_font(terminal); return TRUE;
+            case DECREASE_FONT: decrease_font(terminal); return TRUE;
+            case RESET_FONT:    vte_terminal_set_font_scale(terminal, FONT_SCALE); return TRUE;
             default: return FALSE;
         } 
     }
@@ -135,16 +123,11 @@ static gboolean window_key_event(GtkWindow *window, GdkEventKey *event) {
 
     const guint modifiers = event->state & gtk_accelerator_get_default_mod_mask();
 
-     if (modifiers == (GDK_CONTROL_MASK|GDK_MOD1_MASK)) {
+     if (modifiers == (MODIFIER)) {
         switch (gdk_keyval_to_lower(event->keyval)) {
-            case GDK_KEY_h: resize(window, -R_FACTOR, 0); return TRUE;
-            case GDK_KEY_j: resize(window, 0, +R_FACTOR); return TRUE;
-            case GDK_KEY_k: resize(window, 0, -R_FACTOR); return TRUE;
-            case GDK_KEY_l: resize(window, +R_FACTOR, 0); return TRUE;
-            case GDK_KEY_a: create_terminal(); return TRUE;
-            case GDK_KEY_n: cycle_terminal(window, current+1); return TRUE;
-            case GDK_KEY_b: cycle_terminal(window, current-1); return TRUE;
-            case GDK_KEY_s: stick(window); return TRUE;
+            case NEW_TERMINAL:      create_terminal(); return TRUE;
+            case NEXT_TERMINAL:     cycle_terminal(window, current+1); return TRUE;
+            case PREVIOUS_TERMINAL: cycle_terminal(window, current-1); return TRUE;
             default: return FALSE;
        }
      }
